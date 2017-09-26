@@ -4,9 +4,3 @@ class KDNode:
         self.axis        = axis
         self.left_child  = left_child
         self.right_child = right_child
-    
-
-
-
-    
-    def test()
