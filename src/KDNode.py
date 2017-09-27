@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding:Utf-8 -*-
 
 class KDNode:
 	def __init__(self, pivot = None, axis = None, left_child = None, right_child = None):

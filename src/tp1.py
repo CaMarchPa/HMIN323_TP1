@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding:Utf-8 -*-
 
 from KDNode import KDNode;
 import openalea.plantgl.all as pgl
@@ -37,42 +37,6 @@ def closestpoint(kdtree, point ):
 		alternative_candidat = closestpoin(kdtree, oppositesubdiv)
 	
 
-def view_kdtree(kdtree, bbox=[[-1., 1.],[-1., 1.],[-1., 1.]], radius=0.05):
-	import numpy as np
-	import openalea.plantgl.all as pgl
-
-	scene = pgl.Scene()
-	sphere = pgl.Sphere(radius,slices=16,stacks=16)
-	silver = pgl.Material(ambient=(49,49,49),diffuse=3.,specular=(129,129,129),shininess=0.4)
-	gold = pgl.Material(ambient=(63,50,18),diffuse=3.,specular=(160,141,93),shininess=0.4)
-
-	if isinstance(kdtree, KDNode):
-		dim = kdtree.axis
-		plane_bbox = [b for i,b in enumerate(bbox) if i != dim]
-		plane_points = []
-		plane_points += [np.insert([plane_bbox[0][0],plane_bbox[1][0]],dim,kdtree.pivot[dim])]
-		plane_points += [np.insert([plane_bbox[0][0],plane_bbox[1][1]],dim,kdtree.pivot[dim])]
-		plane_points += [np.insert([plane_bbox[0][1],plane_bbox[1][1]],dim,kdtree.pivot[dim])]
-		plane_points += [np.insert([plane_bbox[0][1],plane_bbox[1][0]],dim,kdtree.pivot[dim])]
-
-		left_bbox = np.copy(bbox).astype(float)
-		right_bbox = np.copy(bbox).astype(float)
-		left_bbox[dim,1] = kdtree.pivot[dim]
-		right_bbox[dim,0] = kdtree.pivot[dim]
-
-		scene += pgl.Shape(pgl.Translated(kdtree.pivot,sphere),gold)
-		scene += view_kdtree(kdtree.left_child, bbox=left_bbox, radius=radius)
-		scene += view_kdtree(kdtree.right_child, bbox=right_bbox, radius=radius)
-		scene += pgl.Shape(pgl.Polyline(plane_points+[plane_points[0]],width=2),pgl.Material(ambient=(0,0,0)))
-		scene += pgl.Shape(pgl.FaceSet(plane_points,[range(4)]),pgl.Material(ambient=(0,0,0),transparency=0.6))
-
-	else:
-		assert (type(kdtree) == list) or (isinstance(kdtree,np.ndarray))
-		for p in kdtree:
-			scene += pgl.Shape(pgl.Translated(p,sphere),silver)
-
-	return scene
-    
 def view_kdtree(kdtree, bbox=[[-1., 1.],[-1., 1.],[-1., 1.]], radius=0.05):
 	import numpy as np
 	import openalea.plantgl.all as pgl
@@ -156,9 +120,9 @@ def test_kdtree(create_kdtree_func, closestpoint_func, nbtest=100, nbpoints=1000
 		bftime += time.time()-t
 		if kpoint != bfpoint: 
 			raise ValueError('Invalid closest point')
-		print 'Comparative execution time : KD-Tree [', kdtime,'], BruteForce [', bftime,']'
+	print 'Comparative execution time : KD-Tree [', kdtime,'], BruteForce [', bftime,']'
 
-		return kdtime, bftime
+	return kdtime, bftime
 	
 def plot_execution_time(nbpoints_min=10, nbpoints_max=5000):
 	import matplotlib.pyplot as plt
@@ -177,8 +141,3 @@ def plot_execution_time(nbpoints_min=10, nbpoints_max=5000):
 	plt.plot(nb_points, bf_times, color='b', label='Brute Force')
 	plt.legend()
 	plt.show()
-		
-		
-if __name__ == '__main__':
-	points = generate_random_pointlist()
-	createkdtree(points)
